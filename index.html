@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+</head>
+
+<body>
+    <canvas id="bouncingBall" height="500" width="1060"></canvas>
+    <script>
+        var canvas;
+        var context;
+        var color=[
+            'red',
+            'green',
+            'blue',
+            'yellow',
+            'orange',
+            'black',
+            'brown',
+            'purple',
+            'violet',
+            'pink'
+        ];      
+        var balls = [];
+        var ballSpeeds = []
+        window.onload = function () {
+            canvas = document.getElementById('bouncingBall');
+            context = canvas.getContext("2d");
+            for (var i = 10; i <=100;) {
+                balls.push({
+                    ballX: i,
+                    ballY: i
+                });
+                i = i + 10;
+            }
+            var speedRate = 3;
+            for (var i = 1; i <= balls.length; i++) {
+                ballSpeeds.push({
+                    ballSpeedX: speedRate,
+                    ballSpeedY: speedRate + 2
+                });
+                speedRate += 1;
+            }
+            
+            
+            setInterval(function () {
+                drawEverything();
+            }, 10);
+            
+        }
+        function drawEverything() {
+            drawCanvas();
+            for (var i = 0; i < balls.length; i++) {                
+                moveEverything(balls[i],ballSpeeds[i]);
+                drawCircle(balls[i],ballSpeeds[i],color[i],i+15);
+            }
+        }
+        function drawCanvas() {
+            context.fillStyle = 'black';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        function moveEverything(balls,ballSpeeds) {
+            console.log(JSON.stringify(balls)+" "+JSON.stringify(ballSpeeds));
+            
+            if (balls.ballX >= canvas.width) {
+                ballSpeeds.ballSpeedX = -ballSpeeds.ballSpeedX;
+            }
+            if (balls.ballX <= 0) {
+                ballSpeeds.ballSpeedX = -ballSpeeds.ballSpeedX;
+            }
+            if (balls.ballY >= canvas.height) {
+                ballSpeeds.ballSpeedY = -ballSpeeds.ballSpeedY;
+            }
+            if (balls.ballY <= 0) {
+                ballSpeeds.ballSpeedY = -ballSpeeds.ballSpeedY;
+            }
+        }
+        function drawCircle(balls,ballSpeeds,color,radius) {
+            balls.ballX = balls.ballX + ballSpeeds.ballSpeedX;
+            balls.ballY = balls.ballY + ballSpeeds.ballSpeedY;
+            context.fillStyle = color;
+            context.beginPath();
+            context.arc(balls.ballX, balls.ballY, radius, 0, 2 * Math.PI, true);
+            context.fill();
+        }
+    </script>
+</body>
+
+</html>
